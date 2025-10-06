@@ -1,0 +1,425 @@
+╔════════════════════════════════════════════════════════════════╗
+║                   ANAYAT-AI API ENDPOINTS                     ║
+║                   Complete API Documentation                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+🌐 BASE URL: http://your-vps-ip:3000/api
+📅 Version: 2.0.0
+🔐 Authentication: Bearer Token Required
+
+────────────────────────────────────────────────────────────────
+🔐 AUTHENTICATION ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📤 POST /auth/login
+Description: Login to bot system
+Headers: { "Content-Type": "application/json" }
+Body: {
+  "username": "admin",
+  "password": "password"
+}
+Response: {
+  "status": "success",
+  "token": "jwt_token_here",
+  "user": { "id": 1, "username": "admin" }
+}
+
+📤 POST /auth/verify
+Description: Verify authentication token
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "valid": true,
+  "user": { "id": 1, "username": "admin" }
+}
+
+────────────────────────────────────────────────────────────────
+🤖 BOT MANAGEMENT ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📥 GET /bot/status
+Description: Get bot status and statistics
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "online",
+  "uptime": "2 hours",
+  "users": 150,
+  "commands_processed": 1250,
+  "memory_usage": "45.2 MB",
+  "connected": true
+}
+
+📤 POST /bot/restart
+Description: Restart the bot
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "message": "Bot restart initiated"
+}
+
+📤 POST /bot/stop
+Description: Stop the bot
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "message": "Bot stopped successfully"
+}
+
+📥 GET /bot/qr
+Description: Get current QR code for login
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "qr_code": "base64_encoded_qr_image",
+  "expires_in": 60
+}
+
+────────────────────────────────────────────────────────────────
+💬 MESSAGE ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📤 POST /message/send
+Description: Send message to specific number
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "number": "1234567890",
+  "message": "Hello from API!",
+  "type": "text" // text, image, document
+}
+Response: {
+  "status": "success",
+  "message_id": "message_123",
+  "timestamp": "2024-01-01T12:00:00Z"
+}
+
+📤 POST /message/broadcast
+Description: Broadcast message to all users
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "message": "Broadcast message here",
+  "type": "text"
+}
+Response: {
+  "status": "success",
+  "sent_to": 150,
+  "failed": 0
+}
+
+📥 GET /message/logs
+Description: Get message logs
+Headers: { "Authorization": "Bearer <token>" }
+Query Parameters: ?limit=50&offset=0
+Response: {
+  "status": "success",
+  "logs": [
+    {
+      "id": 1,
+      "number": "1234567890",
+      "message": "Hello",
+      "type": "received",
+      "timestamp": "2024-01-01T12:00:00Z"
+    }
+  ],
+  "total": 1250
+}
+
+────────────────────────────────────────────────────────────────
+📥 MEDIA DOWNLOAD ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📤 POST /download/youtube
+Description: Download YouTube video/audio
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "url": "https://youtube.com/watch?v=abc123",
+  "quality": "720p", // 144p, 360p, 720p, 1080p
+  "format": "mp4" // mp4, mp3
+}
+Response: {
+  "status": "success",
+  "title": "Video Title",
+  "duration": "10:30",
+  "download_url": "http://your-vps-ip:3000/download/file123.mp4",
+  "size": "15.2 MB"
+}
+
+📤 POST /download/instagram
+Description: Download Instagram content
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "url": "https://instagram.com/p/abc123/",
+  "type": "video" // video, image, story
+}
+Response: {
+  "status": "success",
+  "type": "video",
+  "download_url": "http://your-vps-ip:3000/download/insta123.mp4",
+  "size": "8.5 MB"
+}
+
+📤 POST /download/facebook
+Description: Download Facebook video
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "url": "https://facebook.com/watch/?v=abc123"
+}
+Response: {
+  "status": "success",
+  "download_url": "http://your-vps-ip:3000/download/fb123.mp4",
+  "size": "12.1 MB"
+}
+
+────────────────────────────────────────────────────────────────
+🎨 STICKER ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📤 POST /sticker/create
+Description: Create sticker from image
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "multipart/form-data"
+}
+Body: form-data {
+  "image": "file.jpg",
+  "pack_name": "ANAYAT-AI",
+  "author": "Anayat Team"
+}
+Response: {
+  "status": "success",
+  "sticker_url": "http://your-vps-ip:3000/stickers/sticker123.webp",
+  "pack_info": {
+    "name": "ANAYAT-AI",
+    "author": "Anayat Team"
+  }
+}
+
+📥 GET /sticker/packs
+Description: Get all sticker packs
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "packs": [
+    {
+      "id": 1,
+      "name": "ANAYAT-AI",
+      "author": "Anayat Team",
+      "stickers_count": 25,
+      "created_at": "2024-01-01"
+    }
+  ]
+}
+
+────────────────────────────────────────────────────────────────
+👥 USER MANAGEMENT ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📥 GET /users
+Description: Get all bot users
+Headers: { "Authorization": "Bearer <token>" }
+Query Parameters: ?page=1&limit=20
+Response: {
+  "status": "success",
+  "users": [
+    {
+      "number": "1234567890",
+      "name": "John Doe",
+      "total_messages": 45,
+      "last_seen": "2024-01-01T12:00:00Z",
+      "is_blocked": false
+    }
+  ],
+  "total_users": 150,
+  "page": 1,
+  "total_pages": 8
+}
+
+📤 POST /users/block
+Description: Block a user
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "number": "1234567890",
+  "reason": "Spamming"
+}
+Response: {
+  "status": "success",
+  "message": "User blocked successfully"
+}
+
+📤 POST /users/unblock
+Description: Unblock a user
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "number": "1234567890"
+}
+Response: {
+  "status": "success",
+  "message": "User unblocked successfully"
+}
+
+────────────────────────────────────────────────────────────────
+⚙️ SYSTEM ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📥 GET /system/info
+Description: Get system information
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "system": {
+    "platform": "linux",
+    "architecture": "x64",
+    "node_version": "18.15.0",
+    "memory_usage": "45.2 MB",
+    "uptime": "2 hours"
+  },
+  "bot": {
+    "version": "2.0.0",
+    "connected": true,
+    "total_users": 150
+  }
+}
+
+📥 GET /system/logs
+Description: Get system logs
+Headers: { "Authorization": "Bearer <token>" }
+Query Parameters: ?type=error&limit=100
+Response: {
+  "status": "success",
+  "logs": [
+    {
+      "timestamp": "2024-01-01T12:00:00Z",
+      "level": "info",
+      "message": "Bot started successfully"
+    }
+  ]
+}
+
+📤 POST /system/update
+Description: Update bot to latest version
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "message": "Update process started",
+  "update_id": "update_123"
+}
+
+────────────────────────────────────────────────────────────────
+📊 ANALYTICS ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📥 GET /analytics/overview
+Description: Get analytics overview
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "analytics": {
+    "total_users": 150,
+    "active_today": 45,
+    "messages_today": 230,
+    "popular_commands": [
+      { "command": "sticker", "count": 85 },
+      { "command": "menu", "count": 45 },
+      { "command": "ping", "count": 30 }
+    ],
+    "growth_rate": "12.5%"
+  }
+}
+
+📥 GET /analytics/usage
+Description: Get usage statistics
+Headers: { "Authorization": "Bearer <token>" }
+Query Parameters: ?days=7
+Response: {
+  "status": "success",
+  "usage": [
+    {
+      "date": "2024-01-01",
+      "messages": 230,
+      "users": 45,
+      "commands": 185
+    }
+  ]
+}
+
+────────────────────────────────────────────────────────────────
+🔧 CONFIGURATION ENDPOINTS
+────────────────────────────────────────────────────────────────
+
+📥 GET /config
+Description: Get current configuration
+Headers: { "Authorization": "Bearer <token>" }
+Response: {
+  "status": "success",
+  "config": {
+    "PREFIX": ".",
+    "MODE": "public",
+    "MENU_IMAGE_URL": "https://example.com/menu.jpg",
+    "AUTO_STATUS_SEEN": true,
+    "ANTI_LINK": false
+  }
+}
+
+📤 POST /config/update
+Description: Update bot configuration
+Headers: { 
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+Body: {
+  "PREFIX": "!",
+  "MODE": "private",
+  "AUTO_STATUS_SEEN": false
+}
+Response: {
+  "status": "success",
+  "message": "Configuration updated",
+  "restart_required": true
+}
+
+────────────────────────────────────────────────────────────────
+❌ ERROR CODES
+────────────────────────────────────────────────────────────────
+
+400 - Bad Request: Invalid input parameters
+401 - Unauthorized: Invalid or missing token
+403 - Forbidden: Insufficient permissions
+404 - Not Found: Endpoint or resource not found
+429 - Too Many Requests: Rate limit exceeded
+500 - Internal Server Error: Server-side error
+503 - Service Unavailable: Bot offline or maintenance
+
+────────────────────────────────────────────────────────────────
+📝 USAGE EXAMPLES
+────────────────────────────────────────────────────────────────
+
+Example: Send message using curl
+```bash
+curl -X POST http://localhost:3000/api/message/send \
+  -H "Authorization: Bearer your_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "number": "1234567890",
+    "message": "Hello from API!",
+    "type": "text"
+  }'
